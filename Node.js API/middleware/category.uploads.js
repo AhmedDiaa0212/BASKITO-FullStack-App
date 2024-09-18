@@ -1,4 +1,3 @@
-const { model } = require("mongoose");
 const multer = require("multer");
 const path = require("path");
 
@@ -31,4 +30,4 @@ let upload = multer({
     fileSize: 1048576,
 });
 
-model.exports = upload.single("categoryImage")
+module.exports = upload.single("categoryImage")
