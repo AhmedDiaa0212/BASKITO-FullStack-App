@@ -1,5 +1,5 @@
 const MONG0_DB_CONFIG = {
-    DB: "mongodb+srv://ahmeddeyiaa0212:<Iywf3n7jYQKN6M45>@cluster0.y7c91.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
+    DB: "mongodb://127.0.0.1/Baskito",
     PAGE_SIZE: 10,
 }
 
