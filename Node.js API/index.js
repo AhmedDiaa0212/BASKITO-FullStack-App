@@ -3,20 +3,19 @@ const app = express();
 const mongoose = require("mongoose");
 const { MONG0_DB_CONFIG } = require("./config/app.config");
 const errors = require("./middleware/errors");
-const swaggerUi = require("swagger-ui-express"), swaggerDocument = require("./swagger.json");
+const swaggerUi = require("swagger-ui-express");
+swaggerDocument = require("./swagger.json");
 
 mongoose.Promise = global.Promise;
 mongoose
     .connect(MONG0_DB_CONFIG.DB, {
-        userNewUrlParser: true,
-        useUnifiedTopology: true,
     })
     .then(
         () => {
             console.log("DataBase connected")
         },
         (error) => {
-            console.log("DataBase can't be connected" + err)
+            console.log("DataBase can't be connected " + error)
         }
     );
 
