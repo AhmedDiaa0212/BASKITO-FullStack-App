@@ -72,7 +72,7 @@ async function updateCategory(params, callback) {
         });
 }
 
-async function DeleteCategory(params, callback) {
+async function deleteCategory(params, callback) {
     const categoryId = params.categoryId;
 
     category
@@ -85,3 +85,12 @@ async function DeleteCategory(params, callback) {
             return callback(error);
         });
 }
+
+
+module.exports = {
+    createCategories,
+    getCategories,
+    getCategoriesById,
+    updateCategory,
+    deleteCategory
+  }
