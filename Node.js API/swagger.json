@@ -1,0 +1,196 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Category Management API",
+    "description": "API for managing categories in the Shopping App",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "host": "localhost:4000",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Categories",
+      "description": "API for managing categories"
+    }
+  ],
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/api/category": {
+      "get": {
+        "tags": ["Categories"],
+        "summary": "Retrieve all categories",
+        "parameters": [
+          {
+            "name": "categoryName",
+            "in": "query",
+            "required": false,
+            "description": "Filter categories by name",
+            "type": "string"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "description": "Number of items per page",
+            "type": "integer"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "description": "Page number for pagination",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful retrieval of categories",
+            "schema": {
+              "$ref": "#/definitions/ServiceResponse"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Categories"],
+        "summary": "Create a new category",
+        "parameters": [
+          {
+            "name": "categoryName",
+            "in": "formData",
+            "description": "Name of the category",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "categoryDescription",
+            "in": "formData",
+            "description": "Description of the category",
+            "type": "string"
+          },
+          {
+            "name": "categoryImage",
+            "in": "formData",
+            "description": "Image of the category",
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Category created successfully",
+            "schema": {
+              "$ref": "#/definitions/ServiceResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/category/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the category",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["Categories"],
+        "summary": "Retrieve a category by ID",
+        "responses": {
+          "200": {
+            "description": "Category details",
+            "schema": {
+              "$ref": "#/definitions/ServiceResponse"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Categories"],
+        "summary": "Update a category by ID",
+        "parameters": [
+          {
+            "name": "categoryName",
+            "in": "formData",
+            "description": "Name of the category",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "categoryDescription",
+            "in": "formData",
+            "description": "Description of the category",
+            "type": "string"
+          },
+          {
+            "name": "categoryImage",
+            "in": "formData",
+            "description": "Image of the category",
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Category updated successfully",
+            "schema": {
+              "$ref": "#/definitions/ServiceResponse"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Categories"],
+        "summary": "Delete a category by ID",
+        "responses": {
+          "200": {
+            "description": "Category deleted successfully",
+            "schema": {
+              "$ref": "#/definitions/ServiceResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Category": {
+      "required": ["categoryName"],
+      "properties": {
+        "categoryName": {
+          "type": "string",
+          "description": "The name of the category"
+        },
+        "categoryDescription": {
+          "type": "string",
+          "description": "The description of the category"
+        },
+        "categoryImage": {
+          "type": "string",
+          "description": "The image URL of the category"
+        }
+      }
+    },
+    "ServiceResponse": {
+      "properties": {
+        "message": {
+          "type": "string",
+          "description": "Response message"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Category"
+          }
+        }
+      }
+    }
+  }
+}
