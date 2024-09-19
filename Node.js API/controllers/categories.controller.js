@@ -52,7 +52,7 @@ exports.findOne = (req, res, next) => {
         categoryId: req.params.id,
     };
 
-    categoriesServices.updateCategory(model, (error, results) => {
+    categoriesServices.getCategoriesById(model, (error, results) => {
         if (error) {
             return next(error);
         }
@@ -78,7 +78,7 @@ exports.update = (req, res, next) => {
                 categoryImage: path != "" ? "/" + path : ""
             };
 
-            categoriesServices.createCategories(model, (error, results) => {
+            categoriesServices.updateCategory(model, (error, results) => {
                 if (error) {
                     return next(error);
                 }
@@ -89,4 +89,20 @@ exports.update = (req, res, next) => {
             });
         }
     })
+}
+
+exports.delete = (req, res, next) => {
+    var model = {
+        categoryId: req.params.id,
+    };
+
+    categoriesServices.deleteCategory(model, (error, results) => {
+        if (error) {
+            return next(error);
+        }
+        return res.status(200).send({
+            message: "Success",
+            data: results,
+        });
+    });
 }
