@@ -12,7 +12,17 @@ const category = mongoose.model(
             type: String,
             required: false,
         },
-    },),
+    },
+        {
+            toJSON: {
+                transfrom: function (doc, ret) {
+                    ret.categoryId = ret._id.toString();
+                    delete ret._id;
+                    delete ret.__v;
+                }
+            }
+        }
+    ),
 );
 
 module.exports = {
