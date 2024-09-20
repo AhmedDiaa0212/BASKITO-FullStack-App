@@ -1,7 +1,10 @@
 import 'dart:convert';
-import 'package:baskito_app/Data/models/category.dart';
+import 'package:baskito_app/Data/models/category%20model/category.dart';
 import 'package:baskito_app/core/config.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
+
+final apiService = Provider((ref) => ApiServices());
 
 class ApiServices {
   static var client = http.Client();
@@ -19,6 +22,10 @@ class ApiServices {
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
+
+      return categoriesFromJson(data["data"]);
+    } else {
+      return null;
     }
   }
 }
