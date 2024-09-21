@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 final categoriesProvider = FutureProvider.family<List<Category>?, Pagination>(
   (ref, pagination) {
     final apiRepository = ref.watch(apiService);
-
     return apiRepository.getCategories(pagination.page, pagination.pageSize);
   },
 );
