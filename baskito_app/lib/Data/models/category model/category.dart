@@ -1,3 +1,4 @@
+import 'package:baskito_app/core/config.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'category.freezed.dart';
@@ -16,4 +17,8 @@ abstract class Category with _$Category {
 
   factory Category.fromJson(Map<String, dynamic> json) =>
       _$CategoryFromJson(json);
+}
+
+extension CategoryExt on Category {
+  String get fullImagePath => Config.imageUrl + categoryImage;
 }
