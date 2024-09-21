@@ -1,7 +1,5 @@
 import 'package:baskito_app/Presentation/view/widgets/home_categories.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -33,10 +31,14 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             Padding(
-                padding: const EdgeInsetsDirectional.all(8.0),
+              padding: const EdgeInsetsDirectional.all(8.0),
+              child: SizedBox(
+                height: 300.0,
                 child: ListView(
                   children: const [HomeCategories()],
-                )),
+                ),
+              ),
+            ),
           ],
         ),
       ),
