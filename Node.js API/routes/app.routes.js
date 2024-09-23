@@ -1,20 +1,20 @@
 const categoriesController = require("../controllers/categories.controller");
+const productsController = require("../controllers/products.controller");
 const express = require("express");
 const router = express.Router();
 
-// Create a new category
+// category
 router.post("/category", categoriesController.create);
-
-// Retrieve all categories
 router.get("/category", categoriesController.findAll);
-
-// Retrieve a single category with id
 router.get("/category/:id", categoriesController.findOne);
-
-// Update a category with id
 router.put("/category/:id", categoriesController.update);
-
-// // Delete a category with id
 router.delete("/category/:id", categoriesController.delete);
+
+// product
+router.post("/product", productsController.create);
+router.get("/product", productsController.findAll);
+router.get("/product/:id", productsController.findOne);
+router.put("/product/:id", productsController.update);
+router.delete("/product/:id", productsController.delete);
 
 module.exports = router;
