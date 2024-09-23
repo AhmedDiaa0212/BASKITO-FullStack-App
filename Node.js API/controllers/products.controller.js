@@ -56,7 +56,7 @@ exports.findAll = (req, res, next) => {
 
 exports.findOne = (req, res, next) => {
     var model = {
-        productId: req.query.id,
+        productId: req.params.id,
     };
 
     productsServices.getProductById(model, (error, results) => {
@@ -107,7 +107,7 @@ exports.update = (req, res, next) => {
 
 exports.delete = (req, res, next) => {
     var model = {
-        productId: req.query.id,
+        productId: req.params.id,
     };
 
     productsServices.deleteProduct(model, (error, results) => {
