@@ -11,8 +11,8 @@ async function createCategories(params, callback) {
         );
     }
 
-    const model = new category(params);
-    model
+    const categoryModel = new category(params);
+    categoryModel
         .save()
         .then((response) => {
             return callback(null, response);
