@@ -9,7 +9,7 @@ const product = mongoose.model(
         required: true,
         unique: true,
       },
-      Category: {
+      category: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Category",
       },
@@ -48,14 +48,14 @@ const product = mongoose.model(
       }
     },
     {
-        toJSON: {
-            transfrom: function (doc, ret) {
-                ret.productId = ret._id.toString();
-                delete ret._id;
-                delete ret.__v;
-            }
+      toJSON: {
+        transform: function (doc, ret) {
+            ret.productId = ret._id.toString();
+            delete ret._id;
+            delete ret.__v;
         }
     }
+  }    
   )
 );
 
