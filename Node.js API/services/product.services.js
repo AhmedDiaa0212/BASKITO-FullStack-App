@@ -38,19 +38,18 @@ async function getProducts(params, callback) {
     var condition = {};
 
     if (productName) {
-        condition["productName"] =
-            { productName: { $regex: new RegExp(productName), $options: "i" } };
+        condition["productName"] = { $regex: new RegExp(productName), $options: "i" };
     }
 
     if (categoryId) {
-        condition["categoryId"] = categoryId;
+        condition["category"] = categoryId;
     }
 
     let perPage = Math.abs(params.pageSize) || MONG0_DB_CONFIG.PAGE_SIZE;
-    let page = (Math.abs(params.page) || 1) - 1
+    let page = (Math.abs(params.page) || 1) - 1;
 
     product
-        .find(condition, "productId productName productShortDescription  productPrice  productSalePrice productImage productSKU productType stockStatus")
+        .find(condition, "productId productName productShortDescription productPrice productSalePrice productImage productSKU productType stockStatus")
         .populate("category", "categoryName categoryImage")
         .limit(perPage)
         .skip(perPage * page)
@@ -62,13 +61,19 @@ async function getProducts(params, callback) {
         });
 }
 
+
 async function getProductById(params, callback) {
     const productId = params.productId;
 
     product
-        .findById("productId")
+        .findById(productId)
         .populate("category", "categoryName categoryImage")
         .then((response) => {
+            if (!response) {
+                return callback({
+                    message: "Product not found with ID " + productId,
+                });
+            }
             return callback(null, response);
         })
         .catch((error) => {
@@ -80,11 +85,14 @@ async function updateProduct(params, callback) {
     const productId = params.productId;
 
     product
-        .findByIdAndUpdate("productId", params, { useFindAndModify: false })
+        .findByIdAndUpdate(productId, params, { useFindAndModify: false })
         .then((response) => {
-            if (!response) 
-                callback("Not found product with id" + productId);
-            else callback(null, response);
+            if (!response) {
+                return callback({
+                    message: "Not found product with ID " + productId,
+                });
+            }
+            return callback(null, response);
         })
         .catch((error) => {
             return callback(error);
@@ -92,14 +100,18 @@ async function updateProduct(params, callback) {
 }
 
 async function deleteProduct(params, callback) {
+    ``
     const productId = params.productId;
 
     product
-        .findByIdAndRemve("productId")
+        .findByIdAndDelete(productId)
         .then((response) => {
-            if (!response) 
-                callback("Not found product with id" + productId);
-            else callback(null, response);
+            if (!response) {
+                return callback({
+                    message: "Not found product with ID " + productId,
+                });
+            }
+            return callback(null, response);
         })
         .catch((error) => {
             return callback(error);
@@ -112,4 +124,4 @@ module.exports = {
     getProductById,
     updateProduct,
     deleteProduct
-  }
+}
