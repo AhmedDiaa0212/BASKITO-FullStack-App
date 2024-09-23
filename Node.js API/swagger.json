@@ -2,8 +2,8 @@
   "swagger": "2.0",
   "info": {
     "version": "1.0.0",
-    "title": "Category Management API",
-    "description": "API for managing categories in the Shopping App",
+    "title": "Baskito AppAPI",
+    "description": "API for managing categories and products in the Baskito App",
     "license": {
       "name": "MIT",
       "url": "https://opensource.org/licenses/MIT"
@@ -15,6 +15,10 @@
     {
       "name": "Categories",
       "description": "API for managing categories"
+    },
+    {
+      "name": "Products",
+      "description": "API for managing products"
     }
   ],
   "schemes": ["http"],
@@ -158,37 +162,317 @@
           }
         }
       }
-    }
-  },
-  "definitions": {
-    "Category": {
-      "required": ["categoryName"],
-      "properties": {
-        "categoryName": {
-          "type": "string",
-          "description": "The name of the category"
-        },
-        "categoryDescription": {
-          "type": "string",
-          "description": "The description of the category"
-        },
-        "categoryImage": {
-          "type": "string",
-          "description": "The image URL of the category"
+    },
+    "/api/product": {
+      "get": {
+        "tags": ["Products"],
+        "summary": "Retrieve all products",
+        "parameters": [
+          {
+            "name": "productName",
+            "in": "query",
+            "required": false,
+            "description": "Filter products by name",
+            "type": "string"
+          },
+          {
+            "name": "categoryId",
+            "in": "query",
+            "required": false,
+            "description": "Filter products by category ID",
+            "type": "string"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "description": "Number of items per page",
+            "type": "integer"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "description": "Page number for pagination",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful retrieval of products",
+            "schema": {
+              "$ref": "#/definitions/ProductResponse"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Products"],
+        "summary": "Create a new product",
+        "parameters": [
+          {
+            "name": "productName",
+            "in": "formData",
+            "description": "Name of the product",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "category",
+            "in": "formData",
+            "description": "ID of the category",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "productShortDescription",
+            "in": "formData",
+            "description": "Short description of the product",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "productDescription",
+            "in": "formData",
+            "description": "Detailed description of the product",
+            "type": "string"
+          },
+          {
+            "name": "productPrice",
+            "in": "formData",
+            "description": "Price of the product",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "productSalePrice",
+            "in": "formData",
+            "description": "Sale price of the product",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "productImage",
+            "in": "formData",
+            "description": "Image of the product",
+            "type": "file"
+          },
+          {
+            "name": "productSKU",
+            "in": "formData",
+            "description": "SKU of the product",
+            "type": "string"
+          },
+          {
+            "name": "productType",
+            "in": "formData",
+            "description": "Type of the product",
+            "type": "string"
+          },
+          {
+            "name": "stockStatus",
+            "in": "formData",
+            "description": "Stock status of the product",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product created successfully",
+            "schema": {
+              "$ref": "#/definitions/ProductResponse"
+            }
+          }
         }
       }
     },
-    "ServiceResponse": {
-      "properties": {
-        "message": {
-          "type": "string",
-          "description": "Response message"
-        },
-        "data": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Category"
+    "/api/product/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the product",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["Products"],
+        "summary": "Retrieve a product by ID",
+        "responses": {
+          "200": {
+            "description": "Product details",
+            "schema": {
+              "$ref": "#/definitions/ProductResponse"
+            }
           }
+        }
+      },
+      "put": {
+        "tags": ["Products"],
+        "summary": "Update a product by ID",
+        "parameters": [
+          {
+            "name": "productName",
+            "in": "formData",
+            "description": "Name of the product",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "category",
+            "in": "formData",
+            "description": "ID of the category",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "productShortDescription",
+            "in": "formData",
+            "description": "Short description of the product",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "productDescription",
+            "in": "formData",
+            "description": "Detailed description of the product",
+            "type": "string"
+          },
+          {
+            "name": "productPrice",
+            "in": "formData",
+            "description": "Price of the product",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "productSalePrice",
+            "in": "formData",
+            "description": "Sale price of the product",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "productImage",
+            "in": "formData",
+            "description": "Image of the product",
+            "type": "file"
+          },
+          {
+            "name": "productSKU",
+            "in": "formData",
+            "description": "SKU of the product",
+            "type": "string"
+          },
+          {
+            "name": "productType",
+            "in": "formData",
+            "description": "Type of the product",
+            "type": "string"
+          },
+          {
+            "name": "stockStatus",
+            "in": "formData",
+            "description": "Stock status of the product",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product updated successfully",
+            "schema": {
+              "$ref": "#/definitions/ProductResponse"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Products"],
+        "summary": "Delete a product by ID",
+        "responses": {
+          "200": {
+            "description": "Product deleted successfully",
+            "schema": {
+              "$ref": "#/definitions/ProductResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "ServiceResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "ProductResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        },
+        "product": {
+          "$ref": "#/definitions/Product"
+        }
+      }
+    },
+    "Product": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number"
+        },
+        "salePrice": {
+          "type": "number"
+        },
+        "category": {
+          "$ref": "#/definitions/Category"
+        },
+        "imageUrl": {
+          "type": "string"
+        },
+        "sku": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "stockStatus": {
+          "type": "string"
+        }
+      }
+    },
+    "Category": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
         }
       }
     }
