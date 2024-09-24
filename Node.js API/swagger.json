@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "version": "1.0.0",
-    "title": "Baskito AppAPI",
+    "title": "Baskito App API",
     "description": "API for managing categories and products in the Baskito App",
     "license": {
       "name": "MIT",
@@ -23,6 +23,10 @@
     {
       "name": "Products",
       "description": "API for managing products"
+    },
+    {
+      "name": "Sliders",
+      "description": "API for managing Sliders"
     }
   ],
   "schemes": [
@@ -477,6 +481,167 @@
           }
         }
       }
+    },
+    "/api/slider": {
+      "get": {
+        "tags": [
+          "Sliders"
+        ],
+        "summary": "Retrieve all sliders",
+        "parameters": [
+          {
+            "name": "sliderName",
+            "in": "query",
+            "required": false,
+            "description": "Filter sliders by name",
+            "type": "string"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "description": "Number of items per page",
+            "type": "integer"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "description": "Page number for pagination",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful retrieval of sliders",
+            "schema": {
+              "$ref": "#/definitions/ServiceResponse"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Sliders"
+        ],
+        "summary": "Create a new slider",
+        "parameters": [
+          {
+            "name": "sliderName",
+            "in": "formData",
+            "description": "Name of the slider",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "sliderDescription",
+            "in": "formData",
+            "description": "Description of the slider",
+            "type": "string"
+          },
+          {
+            "name": "sliderUrl",
+            "in": "formData",
+            "description": "URL for the slider",
+            "type": "string"
+          },
+          {
+            "name": "sliderImage",
+            "in": "formData",
+            "description": "Image for the slider",
+            "required": true,
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Slider created successfully",
+            "schema": {
+              "$ref": "#/definitions/ServiceResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/slider/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the slider",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Sliders"
+        ],
+        "summary": "Retrieve a slider by ID",
+        "responses": {
+          "200": {
+            "description": "Slider details",
+            "schema": {
+              "$ref": "#/definitions/ServiceResponse"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Sliders"
+        ],
+        "summary": "Update a slider by ID",
+        "parameters": [
+          {
+            "name": "sliderName",
+            "in": "formData",
+            "description": "Name of the slider",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "sliderDescription",
+            "in": "formData",
+            "description": "Description of the slider",
+            "type": "string"
+          },
+          {
+            "name": "sliderUrl",
+            "in": "formData",
+            "description": "URL for the slider",
+            "type": "string"
+          },
+          {
+            "name": "sliderImage",
+            "in": "formData",
+            "description": "Image for the slider",
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Slider updated successfully",
+            "schema": {
+              "$ref": "#/definitions/ServiceResponse"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Sliders"
+        ],
+        "summary": "Delete a slider by ID",
+        "responses": {
+          "200": {
+            "description": "Slider deleted successfully",
+            "schema": {
+              "$ref": "#/definitions/ServiceResponse"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -589,6 +754,32 @@
           "description": "Available quantity of the product"
         }
       }
+    },"Slider": {
+        "type": "object",
+        "properties": {
+            "sliderName": {
+                "type": "string",
+                "description": "Name of the slider",
+                "example": "Summer Sale"
+            },
+            "sliderDescription": {
+                "type": "string",
+                "description": "Description of the slider",
+                "example": "Get the best deals this summer!"
+            },
+            "sliderUrl": {
+                "type": "string",
+                "description": "URL for the slider",
+                "example": "https://example.com/summer-sale"
+            },
+            "sliderImage": {
+                "type": "string",
+                "description": "Image URL for the slider",
+                "example": "https://example.com/images/summer-sale.jpg"
+            }
+        },
+        "required": ["sliderName", "sliderImage"]
     }
   }
+  
 }
