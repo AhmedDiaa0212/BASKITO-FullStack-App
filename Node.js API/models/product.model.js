@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const product = mongoose.model(
-  "Products",
+  "Product",
   mongoose.Schema(
     {
       productName: {
@@ -45,7 +45,11 @@ const product = mongoose.model(
       stockStatus: {
         type: String,
         default:"IN",
-      }
+      },
+      relatedproduct: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "RelatedProducts",
+    },
     },
     {
       toJSON: {
