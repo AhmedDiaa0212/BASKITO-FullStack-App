@@ -12,13 +12,13 @@ async function login({ email, password }, callback) {
         }
         else {
             callback({
-                message: "Invalid password"
+                message: "Invalid email or password"
             });
         }
     }
     else {
         callback({
-            message: "Invalid password"
+            message: "Invalid email or password"
         });
     }
 }
