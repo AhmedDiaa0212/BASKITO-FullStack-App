@@ -13,6 +13,10 @@
   "basePath": "/",
   "tags": [
     {
+      "name": "Users",
+      "description": "API for managing users"
+    },
+    {
       "name": "Categories",
       "description": "API for managing categories"
     },
@@ -21,13 +25,98 @@
       "description": "API for managing products"
     }
   ],
-  "schemes": ["http"],
-  "consumes": ["application/json"],
-  "produces": ["application/json"],
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
   "paths": {
+    "/api/user/register": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Register a new user",
+        "parameters": [
+          {
+            "name": "fullName",
+            "in": "formData",
+            "description": "Full name of the user",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "email",
+            "in": "formData",
+            "description": "Email address of the user",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "formData",
+            "description": "Password for the user",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User registered successfully",
+            "schema": {
+              "$ref": "#/definitions/ServiceResponse"
+            }
+          },
+          "400": {
+            "description": "Error during registration"
+          }
+        }
+      }
+    },
+    "/api/user/login": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Login a user",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "formData",
+            "description": "Email address of the user",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "formData",
+            "description": "Password for the user",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User logged in successfully",
+            "schema": {
+              "$ref": "#/definitions/ServiceResponse"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials"
+          }
+        }
+      }
+    },
     "/api/category": {
       "get": {
-        "tags": ["Categories"],
+        "tags": [
+          "Categories"
+        ],
         "summary": "Retrieve all categories",
         "parameters": [
           {
@@ -62,7 +151,9 @@
         }
       },
       "post": {
-        "tags": ["Categories"],
+        "tags": [
+          "Categories"
+        ],
         "summary": "Create a new category",
         "parameters": [
           {
@@ -106,7 +197,9 @@
         }
       ],
       "get": {
-        "tags": ["Categories"],
+        "tags": [
+          "Categories"
+        ],
         "summary": "Retrieve a category by ID",
         "responses": {
           "200": {
@@ -118,7 +211,9 @@
         }
       },
       "put": {
-        "tags": ["Categories"],
+        "tags": [
+          "Categories"
+        ],
         "summary": "Update a category by ID",
         "parameters": [
           {
@@ -151,7 +246,9 @@
         }
       },
       "delete": {
-        "tags": ["Categories"],
+        "tags": [
+          "Categories"
+        ],
         "summary": "Delete a category by ID",
         "responses": {
           "200": {
@@ -165,7 +262,9 @@
     },
     "/api/product": {
       "get": {
-        "tags": ["Products"],
+        "tags": [
+          "Products"
+        ],
         "summary": "Retrieve all products",
         "parameters": [
           {
@@ -201,13 +300,15 @@
           "200": {
             "description": "Successful retrieval of products",
             "schema": {
-              "$ref": "#/definitions/ProductResponse"
+              "$ref": "#/definitions/ServiceResponse"
             }
           }
         }
       },
       "post": {
-        "tags": ["Products"],
+        "tags": [
+          "Products"
+        ],
         "summary": "Create a new product",
         "parameters": [
           {
@@ -264,23 +365,17 @@
             "type": "string"
           },
           {
-            "name": "productType",
+            "name": "productQuantity",
             "in": "formData",
-            "description": "Type of the product",
-            "type": "string"
-          },
-          {
-            "name": "stockStatus",
-            "in": "formData",
-            "description": "Stock status of the product",
-            "type": "string"
+            "description": "Available quantity of the product",
+            "type": "integer"
           }
         ],
         "responses": {
           "200": {
             "description": "Product created successfully",
             "schema": {
-              "$ref": "#/definitions/ProductResponse"
+              "$ref": "#/definitions/ServiceResponse"
             }
           }
         }
@@ -297,19 +392,23 @@
         }
       ],
       "get": {
-        "tags": ["Products"],
+        "tags": [
+          "Products"
+        ],
         "summary": "Retrieve a product by ID",
         "responses": {
           "200": {
             "description": "Product details",
             "schema": {
-              "$ref": "#/definitions/ProductResponse"
+              "$ref": "#/definitions/ServiceResponse"
             }
           }
         }
       },
       "put": {
-        "tags": ["Products"],
+        "tags": [
+          "Products"
+        ],
         "summary": "Update a product by ID",
         "parameters": [
           {
@@ -366,35 +465,31 @@
             "type": "string"
           },
           {
-            "name": "productType",
+            "name": "productQuantity",
             "in": "formData",
-            "description": "Type of the product",
-            "type": "string"
-          },
-          {
-            "name": "stockStatus",
-            "in": "formData",
-            "description": "Stock status of the product",
-            "type": "string"
+            "description": "Available quantity of the product",
+            "type": "integer"
           }
         ],
         "responses": {
           "200": {
             "description": "Product updated successfully",
             "schema": {
-              "$ref": "#/definitions/ProductResponse"
+              "$ref": "#/definitions/ServiceResponse"
             }
           }
         }
       },
       "delete": {
-        "tags": ["Products"],
+        "tags": [
+          "Products"
+        ],
         "summary": "Delete a product by ID",
         "responses": {
           "200": {
             "description": "Product deleted successfully",
             "schema": {
-              "$ref": "#/definitions/ProductResponse"
+              "$ref": "#/definitions/ServiceResponse"
             }
           }
         }
@@ -410,55 +505,26 @@
         },
         "message": {
           "type": "string"
+        },
+        "data": {
+          "type": "object"
         }
       }
     },
-    "ProductResponse": {
+    "User": {
       "type": "object",
       "properties": {
-        "success": {
-          "type": "boolean"
+        "fullName": {
+          "type": "string",
+          "description": "Full name of the user"
         },
-        "message": {
-          "type": "string"
+        "email": {
+          "type": "string",
+          "description": "Email address of the user"
         },
-        "product": {
-          "$ref": "#/definitions/Product"
-        }
-      }
-    },
-    "Product": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "price": {
-          "type": "number"
-        },
-        "salePrice": {
-          "type": "number"
-        },
-        "category": {
-          "$ref": "#/definitions/Category"
-        },
-        "imageUrl": {
-          "type": "string"
-        },
-        "sku": {
-          "type": "string"
-        },
-        "type": {
-          "type": "string"
-        },
-        "stockStatus": {
-          "type": "string"
+        "password": {
+          "type": "string",
+          "description": "Password for the user"
         }
       }
     },
@@ -466,13 +532,65 @@
       "type": "object",
       "properties": {
         "id": {
-          "type": "string"
+          "type": "string",
+          "description": "Unique identifier for the category"
         },
-        "name": {
-          "type": "string"
+        "categoryName": {
+          "type": "string",
+          "description": "Name of the category"
         },
-        "description": {
-          "type": "string"
+        "categoryDescription": {
+          "type": "string",
+          "description": "Description of the category"
+        },
+        "categoryImage": {
+          "type": "string",
+          "description": "Image URL for the category"
+        }
+      }
+    },
+    "Product": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the product"
+        },
+        "productName": {
+          "type": "string",
+          "description": "Name of the product"
+        },
+        "category": {
+          "type": "string",
+          "description": "Category ID the product belongs to"
+        },
+        "productShortDescription": {
+          "type": "string",
+          "description": "Short description of the product"
+        },
+        "productDescription": {
+          "type": "string",
+          "description": "Detailed description of the product"
+        },
+        "productPrice": {
+          "type": "number",
+          "description": "Price of the product"
+        },
+        "productSalePrice": {
+          "type": "number",
+          "description": "Sale price of the product"
+        },
+        "productImage": {
+          "type": "string",
+          "description": "Image URL for the product"
+        },
+        "productSKU": {
+          "type": "string",
+          "description": "Stock Keeping Unit for the product"
+        },
+        "productQuantity": {
+          "type": "integer",
+          "description": "Available quantity of the product"
         }
       }
     }
