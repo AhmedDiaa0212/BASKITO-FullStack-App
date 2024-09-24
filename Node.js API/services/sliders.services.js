@@ -2,7 +2,7 @@ const { slider } = require("../models/slider.model");
 const { MONG0_DB_CONFIG } = require("../config/app.config");
 
 async function createSlider(params, callback) {
-    if (!params.sliderNameName) {
+    if (!params.sliderName) {
         return callback(
             {
                 message: "slider Name Required"
