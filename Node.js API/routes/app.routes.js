@@ -1,5 +1,6 @@
 const categoriesController = require("../controllers/categories.controller");
 const productsController = require("../controllers/products.controller");
+const usersController = require("../controllers/users.controller");
 const express = require("express");
 const router = express.Router();
 
@@ -16,5 +17,10 @@ router.get("/product", productsController.findAll);
 router.get("/product/:id", productsController.findOne);
 router.put("/product/:id", productsController.update);
 router.delete("/product/:id", productsController.delete);
+
+// auth
+router.post("/register", usersController.register);
+router.post("/login", usersController.login);
+
 
 module.exports = router;
