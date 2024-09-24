@@ -35,7 +35,7 @@
     "application/json"
   ],
   "paths": {
-    "/api/user/register": {
+    "/api/register": {
       "post": {
         "tags": [
           "Users"
@@ -43,25 +43,13 @@
         "summary": "Register a new user",
         "parameters": [
           {
-            "name": "fullName",
-            "in": "formData",
-            "description": "Full name of the user",
+            "name": "user",
+            "in": "body",
+            "description": "User object for registration",
             "required": true,
-            "type": "string"
-          },
-          {
-            "name": "email",
-            "in": "formData",
-            "description": "Email address of the user",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "password",
-            "in": "formData",
-            "description": "Password for the user",
-            "required": true,
-            "type": "string"
+            "schema": {
+              "$ref": "#/definitions/UserRegister"
+            }
           }
         ],
         "responses": {
@@ -77,7 +65,7 @@
         }
       }
     },
-    "/api/user/login": {
+    "/api/login": {
       "post": {
         "tags": [
           "Users"
@@ -85,18 +73,13 @@
         "summary": "Login a user",
         "parameters": [
           {
-            "name": "email",
-            "in": "formData",
-            "description": "Email address of the user",
+            "name": "user",
+            "in": "body",
+            "description": "User object for login",
             "required": true,
-            "type": "string"
-          },
-          {
-            "name": "password",
-            "in": "formData",
-            "description": "Password for the user",
-            "required": true,
-            "type": "string"
+            "schema": {
+              "$ref": "#/definitions/UserLogin"
+            }
           }
         ],
         "responses": {
@@ -511,13 +494,26 @@
         }
       }
     },
-    "User": {
+    "UserRegister": {
       "type": "object",
       "properties": {
         "fullName": {
           "type": "string",
           "description": "Full name of the user"
         },
+        "email": {
+          "type": "string",
+          "description": "Email address of the user"
+        },
+        "password": {
+          "type": "string",
+          "description": "Password for the user"
+        }
+      }
+    },
+    "UserLogin": {
+      "type": "object",
+      "properties": {
         "email": {
           "type": "string",
           "description": "Email address of the user"
