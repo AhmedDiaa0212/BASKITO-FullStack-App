@@ -39,7 +39,7 @@ const product = mongoose.model(
       },
       productType: {
         type: String,
-        required: true,
+        required: false,
         default: "simple",
       },
       stockStatus: {
