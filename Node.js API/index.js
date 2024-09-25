@@ -31,7 +31,7 @@ app.use(cors({
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.listen(process.env.port || 4000, function () {
-    console.log("Ready to Go!")
+    console.log("Ready to Go! Swagger docs available at http://localhost:4000/api-docs")
 });
 
 
