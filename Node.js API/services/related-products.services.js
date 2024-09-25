@@ -30,7 +30,7 @@ async function addRelatedProducts(params, callback) {
                 },
                 {
                     $addToSet: {
-                        "relatedProducts": relatedProductModel // Make sure this matches schema
+                        "relatedProducts": relatedProductModel
                     }
                 },
             );
