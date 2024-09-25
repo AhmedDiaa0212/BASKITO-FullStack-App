@@ -56,14 +56,16 @@ async function getProducts(params, callback) {
     product
         .find(condition, "productId productName productShortDescription productPrice productSalePrice productImage productSKU productType stockStatus")
         .populate("category", "categoryName categoryImage")
-        .populate("relatedProducts", "relatedProduct") 
+        .populate("relatedProducts", "relatedProduct")
         .limit(perPage)
         .skip(perPage * page)
         .then((response) => {
-                var res = response.map(r => {
-                    r.relatedProducts = r.relatedProducts.length > 0 ? r.relatedProducts : ["No related products found"];
-                    return r;
-                });
+            var res = response.map(r => {
+                if (r.relatedProducts.length > 0) {
+                    r.relatedProducts = r.relatedProducts.map(x => x.relatedProduct);
+                }
+                return r;
+            });
             return callback(null, res);
         })
         .catch((error) => {
@@ -78,14 +80,14 @@ async function getProductById(params, callback) {
     product
         .findById(productId)
         .populate("category", "categoryName categoryImage")
-        .populate("relatedProducts", "relatedProduct") 
+        .populate("relatedProducts", "relatedProduct")
         .then((response) => {
             if (!response) {
                 return callback({
                     message: "Product not found with ID " + productId,
                 });
             }
-            response.relatedProducts = response.relatedProducts.map(x => {return x.relatedProduct});
+            response.relatedProducts = response.relatedProducts.map(x => { return x.relatedProduct });
 
             return callback(null, response);
         })
