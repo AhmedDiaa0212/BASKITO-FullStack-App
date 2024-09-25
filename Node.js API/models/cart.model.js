@@ -13,7 +13,7 @@ const cart = mongoose.model(
                 ref: "Product",
                 require: true
             },
-            quantity: {
+            qty: {
                 type: Number,
                 require: true
             }
