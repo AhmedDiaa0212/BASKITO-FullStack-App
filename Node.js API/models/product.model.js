@@ -28,7 +28,7 @@ const product = mongoose.model(
       productSalePrice: {
         type: Number,
         required: true,
-        default:0,
+        default: 0,
       },
       productImage: {
         type: String,
@@ -40,26 +40,28 @@ const product = mongoose.model(
       productType: {
         type: String,
         required: true,
-        default:"simple",
+        default: "simple",
       },
       stockStatus: {
         type: String,
-        default:"IN",
+        default: "IN",
       },
-      relatedproduct: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "RelatedProducts",
-    },
+      relatedProducts: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "RelatedProducts",
+        }
+      ],
     },
     {
       toJSON: {
         transform: function (doc, ret) {
-            ret.productId = ret._id.toString();
-            delete ret._id;
-            delete ret.__v;
+          ret.productId = ret._id.toString();
+          delete ret._id;
+          delete ret.__v;
         }
+      }
     }
-  }    
   )
 );
 
