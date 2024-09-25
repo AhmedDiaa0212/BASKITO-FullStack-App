@@ -1,6 +1,5 @@
 const { MONG0_DB_CONFIG } = require("../config/app.config");
 const { product } = require("../models/product.model");
-const { category } = require("../models/category.model");
 
 async function createProduct(params, callback) {
     if (!params.productName) {
@@ -45,16 +44,27 @@ async function getProducts(params, callback) {
         condition["category"] = categoryId;
     }
 
+    if (params.productIds) {
+        condition["_id"] = {
+            $in: params.productIds.split(",")
+        }
+    }
+
     let perPage = Math.abs(params.pageSize) || MONG0_DB_CONFIG.PAGE_SIZE;
     let page = (Math.abs(params.page) || 1) - 1;
 
     product
         .find(condition, "productId productName productShortDescription productPrice productSalePrice productImage productSKU productType stockStatus")
         .populate("category", "categoryName categoryImage")
+        .populate("relatedProducts", "relatedProduct") 
         .limit(perPage)
         .skip(perPage * page)
         .then((response) => {
-            return callback(null, response);
+                var res = response.map(r => {
+                    r.relatedProducts = r.relatedProducts.length > 0 ? r.relatedProducts : ["No related products found"];
+                    return r;
+                });
+            return callback(null, res);
         })
         .catch((error) => {
             return callback(error);
@@ -68,12 +78,15 @@ async function getProductById(params, callback) {
     product
         .findById(productId)
         .populate("category", "categoryName categoryImage")
+        .populate("relatedProducts", "relatedProduct") 
         .then((response) => {
             if (!response) {
                 return callback({
                     message: "Product not found with ID " + productId,
                 });
             }
+            response.relatedProducts = response.relatedProducts.map(x => {return x.relatedProduct});
+
             return callback(null, response);
         })
         .catch((error) => {
