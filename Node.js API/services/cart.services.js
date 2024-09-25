@@ -1,84 +1,68 @@
-const { model } = require("mongoose");
 const { cart } = require("../models/cart.model");
-const async = require("async");
+
 async function addCart(params, callback) {
     if (!params.userId) {
-        return callback(
-            {
-                message: "UserId Required"
-            },
-            ""
-        );
+        return callback({ message: "UserId Required" }, "");
     }
 
-    cart.findOne({ userId: params.userId }, function (err, cartDB) {
-        if (err) {
-            return callback(err);
-        }
-        else {
-            if (cartDB == null) {
-                const cartModel = new cart({
-                    userId: params.userId,
-                    products: params.products
-                });
+    try {
+        // Find the cart using Promises or async/await
+        let cartDB = await cart.findOne({ userId: params.userId });
 
-                cartModel
-                    .save()
-                    .then((response) => {
-                        return callback(null, response);
-                    })
-                    .catch((error) => {
-                        return callback(error);
+        if (!cartDB) {
+            // Create a new cart if none is found
+            const cartModel = new cart({
+                userId: params.userId,
+                products: params.products
+            });
+            const response = await cartModel.save();
+            return callback(null, response);
+        } else if (cartDB.products.length === 0) {
+            cartDB.products = params.products;
+            await cartDB.save();
+            return callback(null, cartDB);
+        } else {
+            // Handle adding or updating products using async/await
+            for (let product of params.products) {
+                // Find the index of the product in the existing cart
+                let itemIndex = cartDB.products.findIndex(p => p.product.toString() === product.product);
+                
+                if (itemIndex === -1) {
+                    // If product is not in the cart, add it
+                    cartDB.products.push({
+                        product: product.product,
+                        qty: product.qty
                     });
+                } else {
+                    // If product is already in the cart, update the quantity
+                    cartDB.products[itemIndex].qty = Number(cartDB.products[itemIndex].qty) + Number(product.qty);
+                }
             }
-            else if (cartDB.products.length == 0) {
-                cartDB.products = params.products;
-                cartDB.save();
-                return callback(null, cartDB);
-            }
-            else {
-                async.eachSeries(params.products, function (product, asyncDone) {
-                    let itemIdex = cartDB.products.findIndex(p => p.product == product.product);
-
-                    if (itemIdex === -1) {
-                        cartDB.push({
-                            product: product.product,
-                            qty: product.qty
-                        });
-                        cartDB.save(asyncDone);
-                    }
-                    else {
-                        cartDB.products[itemIdex].qty = cartDB.products[itemIdex].qty + product.qty;
-                        cartDB.save(asyncDone);
-                    }
-                });
-                return callback(null, cartDB);
-            }
+            await cartDB.save();
+            return callback(null, cartDB);
         }
-    })
+    } catch (err) {
+        return callback(err);
+    }
 }
 
 async function getCart(params, callback) {
-    cart.findOne({ userId: params.userId })
-        .populate({
-            path: "prproducts",
-            populate: {
-                path: "product",
-                model: "Products",
+    try {
+        const cartDB = await cart.findOne({ userId: params.userId })
+            .populate({
+                path: "products.product", // Correct the path here
                 select: "productName productPrice productSalePrice productImage",
                 populate: {
-                    path: "category",
+                    path: "category", // Adjust if necessary based on your Product model
                     model: "Category",
                     select: "categoryName"
                 }
-            }
-        })
-        .then((response) => {
-            return callback(null, response);
-        })
-        .catch((error) => {
-            return callback(error);
-        });
+            });
+
+        return callback(null, cartDB);
+    } catch (error) {
+        return callback(error);
+    }
 }
 
 async function removeCartItem(params, callback) {
