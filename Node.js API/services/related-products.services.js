@@ -44,7 +44,7 @@ async function addRelatedProducts(params, callback) {
 async function removeRelatedProducts(params, callback) {
     const id = params.id;
 
-    relatedProductModel.findByIdAndDelete(id)
+    relatedProduct.findByIdAndDelete(id)
         .then((response) => {
             if(!response){
                 callback("Product Id Not Found");   
