@@ -7,30 +7,32 @@ const cart = mongoose.model(
             type: String,
             required: true,
         },
-        products: {
-            product: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "Product",
-                require: true
-            },
-            qty: {
-                type: Number,
-                require: true
+        products: [
+            {
+                product: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "Product",
+                    required: true
+                },
+                qty: {
+                    type: Number,
+                    required: true
+                }
             }
-        },
+        ],
     },
         {
             toJSON: {
-                transfrom: function (doc, ret) {
+                transform: function (doc, ret) {
                     ret.cartId = ret._id.toString();
                     delete ret._id;
                     delete ret.__v;
                 }
             }
         }
-    ),
+    )
 );
 
 module.exports = {
     cart,
-}
+};
