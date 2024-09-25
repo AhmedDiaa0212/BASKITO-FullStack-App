@@ -25,6 +25,10 @@
       "description": "API for managing products"
     },
     {
+      "name": "RelatedProducts",
+      "description": "API for managing Related Products"
+    },
+    {
       "name": "Sliders",
       "description": "API for managing Sliders"
     }
@@ -482,6 +486,72 @@
         }
       }
     },
+      "/api/relatedProduct": {
+        "post": {
+          "tags": [
+            "RelatedProducts"
+          ],
+          "summary": "Create a related product",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "description": "Object containing IDs of the primary and related products",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "Product": {
+                    "type": "string",
+                    "description": "ID of the primary product"
+                  },
+                  "relatedProduct": {
+                    "type": "string",
+                    "description": "ID of the related product"
+                  }
+                },
+                "required": ["Product", "relatedProduct"]
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Related product created successfully",
+              "schema": {
+                "$ref": "#/definitions/ServiceResponse"
+              }
+            },
+            "400": {
+              "description": "Invalid input"
+            }
+          }
+        }
+      },
+      "/api/relatedProduct/{id}": {
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the related product",
+            "type": "string"
+          }
+        ],
+        "delete": {
+          "tags": [
+            "RelatedProducts"
+          ],
+          "summary": "Delete a related product",
+          "responses": {
+            "200": {
+              "description": "Related product deleted successfully"
+            },
+            "404": {
+              "description": "Related product not found"
+            }
+          }
+        }
+      },     
     "/api/slider": {
       "get": {
         "tags": [
