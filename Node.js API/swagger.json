@@ -486,72 +486,75 @@
         }
       }
     },
-      "/api/relatedProduct": {
-        "post": {
-          "tags": [
-            "RelatedProducts"
-          ],
-          "summary": "Create a related product",
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "description": "Object containing IDs of the primary and related products",
-              "required": true,
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "Product": {
-                    "type": "string",
-                    "description": "ID of the primary product"
-                  },
-                  "relatedProduct": {
-                    "type": "string",
-                    "description": "ID of the related product"
-                  }
-                },
-                "required": ["Product", "relatedProduct"]
-              }
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "Related product created successfully",
-              "schema": {
-                "$ref": "#/definitions/ServiceResponse"
-              }
-            },
-            "400": {
-              "description": "Invalid input"
-            }
-          }
-        }
-      },
-      "/api/relatedProduct/{id}": {
+    "/api/relatedProduct": {
+      "post": {
+        "tags": [
+          "RelatedProducts"
+        ],
+        "summary": "Create a related product",
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
+            "name": "body",
+            "in": "body",
+            "description": "Object containing IDs of the primary and related products",
             "required": true,
-            "description": "ID of the related product",
-            "type": "string"
-          }
-        ],
-        "delete": {
-          "tags": [
-            "RelatedProducts"
-          ],
-          "summary": "Delete a related product",
-          "responses": {
-            "200": {
-              "description": "Related product deleted successfully"
-            },
-            "404": {
-              "description": "Related product not found"
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Product": {
+                  "type": "string",
+                  "description": "ID of the primary product"
+                },
+                "relatedProduct": {
+                  "type": "string",
+                  "description": "ID of the related product"
+                }
+              },
+              "required": [
+                "Product",
+                "relatedProduct"
+              ]
             }
           }
+        ],
+        "responses": {
+          "200": {
+            "description": "Related product created successfully",
+            "schema": {
+              "$ref": "#/definitions/ServiceResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
         }
-      },     
+      }
+    },
+    "/api/relatedProduct/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the related product",
+          "type": "string"
+        }
+      ],
+      "delete": {
+        "tags": [
+          "RelatedProducts"
+        ],
+        "summary": "Delete a related product",
+        "responses": {
+          "200": {
+            "description": "Related product deleted successfully"
+          },
+          "404": {
+            "description": "Related product not found"
+          }
+        }
+      }
+    },
     "/api/slider": {
       "get": {
         "tags": [
@@ -744,7 +747,12 @@
           "type": "string",
           "description": "Password for the user"
         }
-      }
+      },
+      "required": [
+        "fullName",
+        "email",
+        "password"
+      ]
     },
     "UserLogin": {
       "type": "object",
@@ -757,7 +765,11 @@
           "type": "string",
           "description": "Password for the user"
         }
-      }
+      },
+      "required": [
+        "email",
+        "password"
+      ]
     },
     "Category": {
       "type": "object",
@@ -778,12 +790,15 @@
           "type": "string",
           "description": "Image URL for the category"
         }
-      }
+      },
+      "required": [
+        "categoryName"
+      ]
     },
     "Product": {
       "type": "object",
       "properties": {
-        "id": {
+        "productId": {
           "type": "string",
           "description": "Unique identifier for the product"
         },
@@ -809,7 +824,8 @@
         },
         "productSalePrice": {
           "type": "number",
-          "description": "Sale price of the product"
+          "description": "Sale price of the product",
+          "default": 0
         },
         "productImage": {
           "type": "string",
@@ -817,39 +833,79 @@
         },
         "productSKU": {
           "type": "string",
-          "description": "Stock Keeping Unit for the product"
+          "description": "Stock Keeping Unit (SKU) for the product"
         },
-        "productQuantity": {
-          "type": "integer",
-          "description": "Available quantity of the product"
+        "productType": {
+          "type": "string",
+          "description": "Type of the product",
+          "default": "simple"
+        },
+        "stockStatus": {
+          "type": "string",
+          "description": "Stock status of the product",
+          "default": "IN"
+        },
+        "relatedProducts": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "Related product IDs"
+          }
         }
-      }
-    },"Slider": {
+      },
+      "required": [
+        "productName",
+        "category",
+        "productShortDescription",
+        "productPrice",
+        "productSalePrice"
+      ]
+    },
+      "RelatedProducts": {
         "type": "object",
         "properties": {
-            "sliderName": {
-                "type": "string",
-                "description": "Name of the slider",
-                "example": "Summer Sale"
-            },
-            "sliderDescription": {
-                "type": "string",
-                "description": "Description of the slider",
-                "example": "Get the best deals this summer!"
-            },
-            "sliderUrl": {
-                "type": "string",
-                "description": "URL for the slider",
-                "example": "https://example.com/summer-sale"
-            },
-            "sliderImage": {
-                "type": "string",
-                "description": "Image URL for the slider",
-                "example": "https://example.com/images/summer-sale.jpg"
-            }
+          "product": {
+            "type": "string",
+            "description": "ID of the product"
+          },
+          "relatedProduct": {
+            "type": "string",
+            "description": "ID of the related product"
+          }
         },
-        "required": ["sliderName", "sliderImage"]
+        "required": [
+          "product",
+          "relatedProduct"
+        ]
+      },    
+    "Slider": {
+      "type": "object",
+      "properties": {
+        "sliderName": {
+          "type": "string",
+          "description": "Name of the slider",
+          "example": "Summer Sale"
+        },
+        "sliderDescription": {
+          "type": "string",
+          "description": "Description of the slider",
+          "example": "Get the best deals this summer!"
+        },
+        "sliderUrl": {
+          "type": "string",
+          "description": "URL for the slider",
+          "example": "https://example.com/summer-sale"
+        },
+        "sliderImage": {
+          "type": "string",
+          "description": "Image URL for the slider",
+          "example": "https://example.com/images/summer-sale.jpg"
+        }
+      },
+      "required": [
+        "sliderName",
+        "sliderImage"
+      ]
     }
   }
-  
 }
