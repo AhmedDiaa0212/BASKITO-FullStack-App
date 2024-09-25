@@ -13,7 +13,7 @@
   "basePath": "/",
   "tags": [
     {
-      "name": "Users",
+      "name": "Auth",
       "description": "API for managing users"
     },
     {
@@ -46,7 +46,7 @@
     "/api/register": {
       "post": {
         "tags": [
-          "Users"
+          "Auth"
         ],
         "summary": "Register a new user",
         "parameters": [
@@ -76,7 +76,7 @@
     "/api/login": {
       "post": {
         "tags": [
-          "Users"
+          "Auth"
         ],
         "summary": "Login a user",
         "parameters": [
