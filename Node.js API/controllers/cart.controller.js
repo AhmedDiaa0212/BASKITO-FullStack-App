@@ -31,10 +31,12 @@ exports.findAll = (req, res, next) => {
 }
 
 exports.delete = (req, res, next) => {
+    // Assuming you send the productId and qty in the request body
+    const productToRemove = req.body.products[0]; // Get the first product if sending as an array
     var model = {
         userId: req.user.userId,
-        productId: req.body.productId,
-        qty: req.body.qty,
+        productId: productToRemove.product,
+        qty: productToRemove.qty // Assuming qty is sent as a string, parse it to number in the service function
     };
 
     cartsServices.removeCartItem(model, (error, results) => {
