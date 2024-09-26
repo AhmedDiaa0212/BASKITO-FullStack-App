@@ -26,9 +26,10 @@ async function addCards(params, callback) {
 
         });
 
-        const card = stripe.customers.createSource(params.customerI_d, {
+        const card = stripe.customers.createSource(params.customerId, {
             source: `${card_token.id}`,
-        })
+        });
+        
         return callback(null, {card: card.id});
     }
     catch(error){
