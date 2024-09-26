@@ -8,7 +8,7 @@ exports.create = (req, res, next) => {
         card_ExpMonth: req.body.card_ExpMonth,
         card_ExpYear: req.body.card_ExpYear,
         card_CVC: req.body.card_CVC,
-        amount: req.body.products,
+        amount: req.body.amount,
 
     };
 
