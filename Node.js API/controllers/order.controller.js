@@ -1,4 +1,4 @@
-const orderServices = require("../services/oreder.services");
+const orderServices = require("../services/order.services");
 
 exports.create = (req, res, next) => {
     var model = {
