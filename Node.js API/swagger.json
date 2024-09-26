@@ -31,6 +31,10 @@
     {
       "name": "Sliders",
       "description": "API for managing Sliders"
+    },
+    {
+      "name": "Carts",
+      "description": "API for managing Carts"
     }
   ],
   "schemes": [
@@ -715,6 +719,173 @@
           }
         }
       }
+    },
+    "/api/cart": {
+      "post": {
+        "tags": [
+          "Carts"
+        ],
+        "summary": "Add products to the cart",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for user authentication",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "products",
+            "in": "body",
+            "description": "Array of products to add to the cart",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "products": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "product": {
+                        "type": "string",
+                        "description": "ID of the product"
+                      },
+                      "qty": {
+                        "type": "integer",
+                        "description": "Quantity of the product to add"
+                      }
+                    },
+                    "required": [
+                      "product",
+                      "qty"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "products"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Products added to cart successfully",
+            "schema": {
+              "$ref": "#/definitions/ServiceResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized access. You must be logged in."
+          },
+          "403": {
+            "description": "Forbidden. No token provided."
+          },
+          "500": {
+            "description": "Internal Server Error. Check the server logs for details."
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Carts"
+        ],
+        "summary": "Retrieve the user's cart",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for user authentication",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful retrieval of the cart",
+            "schema": {
+              "$ref": "#/definitions/ServiceResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized access. You must be logged in."
+          },
+          "403": {
+            "description": "Forbidden. No token provided."
+          },
+          "500": {
+            "description": "Internal Server Error. Check the server logs for details."
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Carts"
+        ],
+        "summary": "Remove products from the cart",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for user authentication",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "products",
+            "in": "body",
+            "description": "Array of products to remove from the cart",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "products": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "product": {
+                        "type": "string",
+                        "description": "ID of the product"
+                      }
+                    },
+                    "required": [
+                      "product"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "products"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Products removed from cart successfully",
+            "schema": {
+              "$ref": "#/definitions/ServiceResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized access. You must be logged in."
+          },
+          "403": {
+            "description": "Forbidden. No token provided."
+          },
+          "500": {
+            "description": "Internal Server Error. Check the server logs for details."
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -861,23 +1032,23 @@
         "productSalePrice"
       ]
     },
-      "RelatedProducts": {
-        "type": "object",
-        "properties": {
-          "product": {
-            "type": "string",
-            "description": "ID of the product"
-          },
-          "relatedProduct": {
-            "type": "string",
-            "description": "ID of the related product"
-          }
+    "RelatedProducts": {
+      "type": "object",
+      "properties": {
+        "product": {
+          "type": "string",
+          "description": "ID of the product"
         },
-        "required": [
-          "product",
-          "relatedProduct"
-        ]
-      },    
+        "relatedProduct": {
+          "type": "string",
+          "description": "ID of the related product"
+        }
+      },
+      "required": [
+        "product",
+        "relatedProduct"
+      ]
+    },
     "Slider": {
       "type": "object",
       "properties": {
@@ -905,6 +1076,43 @@
       "required": [
         "sliderName",
         "sliderImage"
+      ]
+    },
+    "Cart": {
+      "type": "object",
+      "properties": {
+        "cartId": {
+          "type": "string",
+          "description": "The unique identifier for the cart.",
+          "example": "60f5a15b8b1e3a001c8e4d0d"
+        },
+        "userId": {
+          "type": "string",
+          "description": "The ID of the user who owns the cart.",
+          "example": "12345"
+        },
+        "products": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "product": {
+                "type": "string",
+                "description": "The ID of the product.",
+                "example": "60f5a15b8b1e3a001c8e4d0e"
+              },
+              "qty": {
+                "type": "integer",
+                "description": "The quantity of the product in the cart.",
+                "example": 2
+              }
+            }
+          }
+        }
+      },
+      "required": [
+        "userId",
+        "products"
       ]
     }
   }
