@@ -3,6 +3,13 @@ const MONG0_DB_CONFIG = {
     PAGE_SIZE: 10,
 }
 
+const STRIPE_CONFIG = {
+    STEIPE_KEY: "sk_test_",
+    CURRENCY: "inr",
+}
+
+
 module.exports = {
     MONG0_DB_CONFIG,
+    STRIPE_CONFIG
 }
