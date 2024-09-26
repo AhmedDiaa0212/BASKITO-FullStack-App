@@ -66,46 +66,46 @@ async function getCart(params, callback) {
 }
 
 async function removeCartItem(params, callback) {
-    cart.findOne({ userId: params.userId }, function (err, cartDB) {
-        if (err) {
-            return callback(err);
+    try {
+        const cartDB = await cart.findOne({ userId: params.userId });
+
+        if (!cartDB) {
+            return callback(null, "Cart not found!");
         }
-        else {
-            if(params.productId && params.qty){
-                const productId = params.productId;
-                const qty = params.qty;
 
-                if(cartDB.products.length == 0){
-                    return callback(null, "Cart empty!");
-                }
-                else{
-                    if (itemIdex === -1) {
-                        return callback(null, "Invaild Product!");
-                    }
-                    else{
-                        if( cartDB.products[itemIdex].qty === qty){
-                            cartDB.product.splice(itemIndex,1)
-                        }
-                        else if( cartDB.products[itemIdex].qty > qty){
-                            cartDB.products[itemIdex].qty = cartDB.products[itemIdex].qty - product.qty;
+        // Expecting a single product and quantity to be passed in params
+        if (params.productId && params.qty) {
+            const productId = params.productId; // Single product ID
+            const qty = parseInt(params.qty);   // Ensure qty is an integer
 
-                        }
-                        else{
-                            return callback(null, "Enter lower Qty!");
-
-                        }
-                        cartDB.save((err,cartM)=>{
-                            if(err) return callback(err);
-                            return callback(null, "Cart update");
-                        })
-
-                    }
-                }
+            if (cartDB.products.length === 0) {
+                return callback(null, "Cart empty!");
             }
+
+            const itemIndex = cartDB.products.findIndex(item => item.product.toString() === productId);
+
+            if (itemIndex === -1) {
+                return callback(null, "Invalid Product!");
+            } else {
+                if (cartDB.products[itemIndex].qty === qty) {
+                    cartDB.products.splice(itemIndex, 1);
+                } else if (cartDB.products[itemIndex].qty > qty) {
+                    cartDB.products[itemIndex].qty -= qty;
+                } else {
+                    return callback(null, "Enter lower Qty!");
+                }
+
+                await cartDB.save();
+                return callback(null, "Cart updated");
+            }
+        } else {
+            return callback(null, "Product ID and quantity are required!");
         }
-    },
-    );
+    } catch (err) {
+        return callback(err);
+    }
 }
+
 
 module.exports={
     addCart,
