@@ -5,7 +5,7 @@ const cards = mongoose.model(
     mongoose.Schema({
         cardName: {
             type: String,
-            required: true,
+            required: false,
         },
         cardNumber: {
             type: String,
