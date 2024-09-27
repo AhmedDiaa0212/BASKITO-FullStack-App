@@ -5,5 +5,4 @@ const MONG0_DB_CONFIG = {
 
 module.exports = {
     MONG0_DB_CONFIG,
-    STRIPE_CONFIG
 }
