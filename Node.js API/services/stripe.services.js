@@ -1,17 +1,16 @@
 const { STRIPE_CONFIG } = require("../config/app.config");
 const stripe = require("stripe")(STRIPE_CONFIG.STEIPE_KEY);
 
-async function createCustomer(params, callback) {
-    try {
-        const customer = await stripe.customers.create({
-            name: params.name,
-            email: params.email
+const createCustomer = (customerData) => {
+    return new Promise((resolve, reject) => {
+        stripe.customers.create(customerData, (err, customer) => {
+            if (err) {
+                return reject(err);
+            }
+            resolve(customer);
         });
-        return callback(null, customer);
-    } catch (error) {
-        return callback(error);
-    }
-}
+    });
+};
 
 async function addCards(params, callback) {
     try {

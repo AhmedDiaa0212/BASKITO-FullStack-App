@@ -5,23 +5,23 @@ const { order } = require("../models/order.model");
 const stripeService = require("./stripe.services");
 const cartService = require("./cart.services");
 
-async function createOrder(params, callback) {
+async function createOrder(params) {
     try {
         const userDB = await user.findOne({ _id: params.userId }).exec();
         if (!userDB) {
-            return callback('User not found');
+            throw new Error('User not found');
         }
 
         let model = {};
 
         if (!userDB.stripCustomerID) {
             const stripeCustomer = await stripeService.createCustomer({
-                "name": userDB.fullName,
-                "email": userDB.email,
+                name: userDB.fullName,
+                email: userDB.email,
             });
 
             if (!stripeCustomer) {
-                return callback('Error creating Stripe customer');
+                throw new Error('Error creating Stripe customer');
             }
 
             userDB.stripCustomerID = stripeCustomer.id;
@@ -40,15 +40,16 @@ async function createOrder(params, callback) {
 
         if (!cardDB) {
             const newCard = await stripeService.addCards({
-                "card_Name": params.card_Name,
-                "card_Number": params.card_Number,
-                "card_ExpMonth": params.card_ExpMonth,
-                "card_ExpYear": params.card_ExpYear,
-                "card_CVC": params.card_CVC,
-                "customer_Id": model.stripCustomerID,
+                card_Name: params.card_Name,
+                card_Number: params.card_Number,
+                card_ExpMonth: params.card_ExpMonth,
+                card_ExpYear: params.card_ExpYear,
+                card_CVC: params.card_CVC,
+                customer_Id: model.stripCustomerID,
             });
+
             if (!newCard) {
-                return callback('Error adding card to Stripe');
+                throw new Error('Error adding card to Stripe');
             }
 
             const cardModel = new cards({
@@ -60,6 +61,7 @@ async function createOrder(params, callback) {
                 cardCVC: params.card_CVC,
                 customerId: model.stripCustomerID,
             });
+
             await cardModel.save();
             model.cardId = newCard.card;
         } else {
@@ -67,15 +69,16 @@ async function createOrder(params, callback) {
         }
 
         const paymentIntent = await stripeService.generatePaymentIntent({
-            "receipt_email": userDB.email,
-            "amount": params.amount,
-            "card_id": model.cardId,
-            "customer_id": model.stripCustomerID,
+            receipt_email: userDB.email,
+            amount: params.amount,
+            card_id: model.cardId,
+            customer_id: model.stripCustomerID,
         });
 
         if (!paymentIntent) {
-            return callback('Error generating payment intent');
+            throw new Error('Error generating payment intent');
         }
+
         model.paymentIntentId = paymentIntent.id;
         model.client_secret = paymentIntent.client_secret;
 
@@ -99,65 +102,64 @@ async function createOrder(params, callback) {
                 grandTotal: grandTotal,
                 orderStatus: "pending",
             });
+
             const savedOrder = await orderModel.save();
             model.orderId = savedOrder._id;
 
-            return callback(null, model);
+            return model;
         }
     } catch (error) {
-        return callback(error);
+        throw error;
     }
 }
 
+async function updateOrder(params) {
+    try {
+        const model = {
+            orderStatus: params.status,
+            transactionId: params.transaction_id,
+        };
 
-async function updateOrder(params, callback) {
-    var model = {
-        orderStatus: params.status,
-        transactionId: params.transaction_id
+        const updatedOrder = await order.findByIdAndUpdate(params.orderId, model, { useFindAndModify: false });
+
+        if (!updatedOrder) {
+            throw new Error('Order Update Failed');
+        }
+
+        if (params.status === "success") {
+            // Code to clear the cart
+        }
+
+        return updatedOrder;
+    } catch (error) {
+        throw error;
     }
-    order
-        .findByIdAndUpdate(params.orderId, model, { useFindAndModify: false })
-        .then((response) => {
-            if (!response) {
-                return callback("Order Update Failed");
-            }
-            else {
-                if (params.status === "success") {
-                    //Clear the cart code
-                }
-            }
-            return callback(null, response);
-        })
-        .catch((error) => {
-            return callback(error);
-        });
 }
 
-async function getOrders(params, callback) {
-    order.findOne({ userId: params.userId })
-        .populate({
-            path: "products",
-            populate: {
-                path: "product",
-                model: "Product",
+async function getOrders(params) {
+    try {
+        const orderData = await order.findOne({ userId: params.userId })
+            .populate({
+                path: "products",
                 populate: {
-                    path: "category",
-                    model: "Category",
-                    select: "categoryName"
+                    path: "product",
+                    model: "Product",
+                    populate: {
+                        path: "category",
+                        model: "Category",
+                        select: "categoryName",
+                    },
                 },
-            }
-        })
-        .then((response) => {
-            return callback(null, response);
-        })
-        .catch((error) => {
-            return callback(error);
-        });
+            });
+
+        return orderData;
+    } catch (error) {
+        throw error;
+    }
 }
 
 module.exports = {
     createOrder,
     updateOrder,
-    getOrders
-
-}
+    getOrders,
+};
