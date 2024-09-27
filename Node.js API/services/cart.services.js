@@ -79,27 +79,27 @@ async function removeCartItem(params, callback) {
             const qty = parseInt(params.qty);   // Ensure qty is an integer
 
             if (cartDB.products.length === 0) {
-                return callback(null, "Cart empty!");
+                return callback("Cart empty!");
             }
 
             const itemIndex = cartDB.products.findIndex(item => item.product.toString() === productId);
 
             if (itemIndex === -1) {
-                return callback(null, "Invalid Product!");
+                return callback("Invalid Product!");
             } else {
                 if (cartDB.products[itemIndex].qty === qty) {
                     cartDB.products.splice(itemIndex, 1);
                 } else if (cartDB.products[itemIndex].qty > qty) {
                     cartDB.products[itemIndex].qty -= qty;
                 } else {
-                    return callback(null, "Enter lower Qty!");
+                    return callback("Enter lower Qty!");
                 }
 
                 await cartDB.save();
-                return callback(null, "Cart updated");
+                return callback("Cart updated");
             }
         } else {
-            return callback(null, "Product ID and quantity are required!");
+            return callback("Product ID and quantity are required!");
         }
     } catch (err) {
         return callback(err);

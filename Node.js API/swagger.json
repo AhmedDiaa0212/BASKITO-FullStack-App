@@ -155,15 +155,6 @@
                 "message": "User logged out successfully."
               }
             }
-          },
-          "401": {
-            "description": "Invalid token or user not logged in",
-            "examples": {
-              "application/json": {
-                "status": "error",
-                "message": "Invalid token."
-              }
-            }
           }
         }
       }
@@ -421,10 +412,16 @@
             "type": "string"
           },
           {
-            "name": "productQuantity",
+            "name": "stockStatus",
             "in": "formData",
-            "description": "Available quantity of the product",
-            "type": "integer"
+            "description": "stockStatus",
+            "type": "string"
+          },
+          {
+            "name": "stockStatus",
+            "in": "formData",
+            "description": "stockStatus",
+            "type": "string"
           }
         ],
         "responses": {
@@ -566,7 +563,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "Product": {
+                "product": {
                   "type": "string",
                   "description": "ID of the primary product"
                 },
@@ -910,6 +907,10 @@
                     "type": "object",
                     "properties": {
                       "product": {
+                        "type": "string",
+                        "description": "ID of the product"
+                      },
+                      "qty": {
                         "type": "string",
                         "description": "ID of the product"
                       }
