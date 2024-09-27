@@ -107,6 +107,25 @@
         }
       }
     },
+    "/api/logout": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Logout a user",
+        "responses": {
+          "200": {
+            "description": "User logged out successfully",
+            "schema": {
+              "$ref": "#/definitions/ServiceResponse"
+            }
+          },
+          "401": {
+            "description": "Invalid token or user not logged in"
+          }
+        }
+      }
+    },
     "/api/category": {
       "get": {
         "tags": [
