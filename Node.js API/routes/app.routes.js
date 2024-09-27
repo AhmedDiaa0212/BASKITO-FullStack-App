@@ -12,6 +12,8 @@ const router = express.Router();
 // auth
 router.post("/register", usersController.register);
 router.post("/login", usersController.login);
+router.post("/logout", usersController.logout);
+
 
 // category
 router.post("/category", categoriesController.create);

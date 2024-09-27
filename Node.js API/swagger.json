@@ -69,10 +69,25 @@
             "description": "User registered successfully",
             "schema": {
               "$ref": "#/definitions/ServiceResponse"
+            },
+            "examples": {
+              "application/json": {
+                "status": "success",
+                "message": "User registered successfully.",
+                "data": {
+                  "userId": "12345"
+                }
+              }
             }
           },
           "400": {
-            "description": "Error during registration"
+            "description": "Bad Request : User already exists!",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "message": "Email already exists."
+              }
+            }
           }
         }
       }
@@ -99,10 +114,25 @@
             "description": "User logged in successfully",
             "schema": {
               "$ref": "#/definitions/ServiceResponse"
+            },
+            "examples": {
+              "application/json": {
+                "status": "success",
+                "message": "User logged in successfully.",
+                "data": {
+                  "token": "abcdef123456"
+                }
+              }
             }
           },
           "401": {
-            "description": "Invalid credentials"
+            "description": "Unauthorized / Invalid credentials",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "message": "Invalid email or password."
+              }
+            }
           }
         }
       }
@@ -118,10 +148,22 @@
             "description": "User logged out successfully",
             "schema": {
               "$ref": "#/definitions/ServiceResponse"
+            },
+            "examples": {
+              "application/json": {
+                "status": "success",
+                "message": "User logged out successfully."
+              }
             }
           },
           "401": {
-            "description": "Invalid token or user not logged in"
+            "description": "Invalid token or user not logged in",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "message": "Invalid token."
+              }
+            }
           }
         }
       }
